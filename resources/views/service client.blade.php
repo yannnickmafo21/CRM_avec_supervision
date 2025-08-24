@@ -41,6 +41,7 @@
             <!-- zone de saisie -->
 
             <section class="espace_discussion">
+                <espace_discussion></espace_discussion>
             </section>
 
         </section>

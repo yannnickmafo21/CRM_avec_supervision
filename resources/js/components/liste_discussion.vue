@@ -7,13 +7,12 @@
                 <img src="public/images/paperclip.png" alt="">
                 <input type="text" class="input_recherche" placeholder="Rechercher">
             </div>
-            <div>
-                <button>
-                    non lue
+            <div class="div_boutons">
+                <button class="_boutons">
+                    Non lue
                 </button>
+                <button class="_boutons">
                     En attente
-                <button>
-
                 </button>
             </div>
         </div>
@@ -45,7 +44,9 @@
 
 
     ._div_recherche{
-        height:20%;
+        height: fit-content;
+        padding-top: 2%;
+        padding-bottom: 2%;
         width: 100%;
         background-color: #f9f9f9;
 
@@ -53,6 +54,7 @@
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
+        gap: 0.5em;
 
 
             .zone_recherche{
@@ -82,12 +84,26 @@
                 }
             }
 
+            .div_boutons{
+                display: flex;
+                justify-content: space-around;
+                height: 2em;
+                width: 100%;
+
+                ._boutons{
+                    border: none;
+                    border-radius: 2em;
+                    width: 40%;
+                    background-color: #dcdcdc;
+                    cursor: pointer;
+                }
+            }
     }
 
     ._div_discussion{
-        height: 80%;
+        height: 100%;
         width: 100%;
-        background-color: aqua;
+        background-color: rgb(108, 108, 108);
     }
 }
 </style>
