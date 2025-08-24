@@ -15,8 +15,11 @@ import { createApp } from 'vue';
 
 const app = createApp({});
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
+import entete from './components/entete.vue';
+import liste_discussion from './components/liste_discussion.vue';
+
+app.component('entete', entete);
+app.component('liste_discussion', liste_discussion);
 
 /**
  * The following block of code may be used to automatically register your

@@ -1,11 +1,44 @@
-@import 'tailwindcss';
+ *{
+    margin: 0px;
+    padding: 0px;
+    background: #404040;
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+body{
+    height: 100vh;
+    width: 100vw;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+main{
+    .zone{
+        background-color: antiquewhite;
+        height: 100vh;
+        width: 100vw;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 0.5fr 1fr 1fr 1fr;
+
+        .entete{
+            grid-row: 1/1;
+            grid-column: 2/5;
+        }
+
+        .profil{
+            background-color: rgb(24, 101, 79);
+            grid-row: 1/5;
+            grid-column: 1/1;
+        }
+
+        .liste_discussion{
+            grid-row: 2/5;
+            grid-column: 2/2;
+        }
+
+        .espace_discussion{
+            background-color: rgb(207, 207, 208);
+            grid-row: 2/5;
+            grid-column: 3/5;
+        }
+    }
 }
