@@ -4,6 +4,9 @@
             <button class="_black">
                 Mettre en attente
             </button>
+            <div>
+                Aujourd'hui
+            </div>
             <button class="_green">
                 Terminer
             </button>
@@ -52,6 +55,7 @@
     height: 100%;
 
     ._espace_bouton{
+        border-bottom:2px solid rgb(107, 107, 107);
         height: 2em;
         display: flex;
         justify-content: space-between;
@@ -118,7 +122,7 @@
                 background-color: rgb(31, 131, 102);
                 color: rgb(255, 255, 255);
             }
-    }
+        }
 
     ._espace_saisie{
         align-self: flex-end;
@@ -149,12 +153,26 @@
         }
     }
 }
+
+::-webkit-scrollbar-thumb:hover{
+    background: rgb(113, 113, 113);
+    border-radius: 2em;
+}
+::-webkit-scrollbar{
+    background: rgb(207, 207, 208);
+}
 </style>
 
 <script>
+import { ScrollSpy } from 'bootstrap';
+
     export default {
         mounted() {
             console.log('Component mounted.')
         }
     }
 </script>
+
+<script setup>
+</script>
+

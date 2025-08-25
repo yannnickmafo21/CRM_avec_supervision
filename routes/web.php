@@ -2,6 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/a', function () {
-    return view('service client');
-});
+Route::view('/service client','service client');

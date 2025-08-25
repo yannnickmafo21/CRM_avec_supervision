@@ -1,6 +1,7 @@
  *{
     margin: 0px;
     padding: 0px;
+    font-family: sans-serif;
 }
 
 body{
@@ -10,17 +11,17 @@ body{
 
 main{
     .zone{
-        background-color: antiquewhite;
         height: 100vh;
         width: 100vw;
 
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 0.5fr 1fr 1fr 1fr;
         grid-template-rows: 0.5fr 1fr 1fr 1fr;
 
         .entete{
             grid-row: 1/1;
             grid-column: 2/5;
+            background: #2e2e2e;
         }
 
         .profil{
