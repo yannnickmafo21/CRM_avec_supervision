@@ -152,7 +152,7 @@
                 background-color: rgb(0, 161, 94);
             }
 
-            /** */
+            /** style pour les messages reçus */
             .message_recu{
                 padding: 2%;
                 width: fit-content;
