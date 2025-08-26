@@ -38,7 +38,7 @@
     </section>
 </template>
 
-<style>
+<style scoped>
 .fermer_live{
     height: 4em;
     border-radius: 2em;
@@ -78,7 +78,7 @@
     position: absolute;
     right: 2%;
     bottom: 2%;
-    background: linear-gradient(rgb(251, 251, 251), gray);
+    background: linear-gradient(rgb(251, 251, 251), rgb(176, 176, 176));
     border-radius: 0.5em 0.5em 0em 0.5em;
 
     ._espace_message{

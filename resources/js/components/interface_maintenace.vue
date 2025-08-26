@@ -79,7 +79,7 @@
                 </div>
             </div>
         </section>
-    </section>    
+    </section>
 </template>
 
 <style scoped>
@@ -222,9 +222,17 @@
         }
     }
 }
-._espace_message::-webkit-scrollbar{
-    width: 0em;
+
+::-webkit-scrollbar-thumb{
+    background: rgb(74, 74, 74);
+    border-radius: 2em;
+    width: 5em;
 }
+
+::-webkit-scrollbar{
+    width: 0.5em;
+}
+
 </style>
 
 <script>

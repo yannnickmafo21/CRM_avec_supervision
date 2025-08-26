@@ -13,36 +13,28 @@
         </div>
 
         <div class="_espace_message">
-            <div class="_div_message_client div_message">
+            <div
+                v-for="(msg, index) in messages"
+                :key="index"
+                :class="msg.sender === 'client' ? '_div_message_client div_message' : '_div_message_agent div_message'"
+            >
                 <img src="/public/images/circle-user-round.svg" alt="">
-                <div class="message_client message">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae.
-                </div>
-            </div>
-
-            <div class="_div_message_agent div_message">
-                <img src="/public/images/circle-user-round.svg" alt="">
-                <div class="message_agent message">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae.
-                </div>
-            </div><div class="_div_message_agent div_message">
-                <img src="/public/images/circle-user-round.svg" alt="">
-                <div class="message_agent message">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae.
-                </div>
-            </div><div class="_div_message_agent div_message">
-                <img src="/public/images/circle-user-round.svg" alt="">
-                <div class="message_agent message">
-                    Lorem, ip
+                <div :class="msg.sender === 'client' ? 'message_client message' : 'message_agent message'">
+                    {{ msg.text }}
                 </div>
             </div>
         </div>
 
         <div class="_espace_saisie">
             <div>
-                <input type="text" placeholder="Aa" class="_input">
-                <img src="/public/images/paperclip.svg" alt="" class="_ajout">
-                <img src="/public/images/smile.svg" alt="" class="_ajout">
+                <input
+                    v-model="input_message_agent"
+                    @keyup.enter="agent_envoyer_message"
+                    type="text"
+                    class="_input"
+                    placeholder="Ecrire un message..."
+                >
+                <img src="/public/images/plus.svg" alt="" class="_ajout">
             </div>
         </div>
     </section>
@@ -55,7 +47,7 @@
     height: 100%;
 
     ._espace_bouton{
-        border-bottom:2px solid rgb(107, 107, 107);
+        border-bottom:2px solid rgb(115, 115, 115);
         height: 2em;
         display: flex;
         justify-content: space-between;
@@ -138,7 +130,7 @@
             justify-content: center;
             align-items: center;
             padding-right: 1em;
-            width: 95%;
+            width: 90%;
         }
         ._input{
             height: 2.5em;
@@ -155,21 +147,53 @@
     }
 }
 
-::-webkit-scrollbar-thumb:hover{
-    background: rgb(113, 113, 113);
+::-webkit-scrollbar-thumb{
+    background: rgb(74, 74, 74);
     border-radius: 2em;
+    width: 5em;
 }
+
 ::-webkit-scrollbar{
-    background: rgb(207, 207, 208);
+    width: 0.5em;
 }
+
 </style>
 
 <script>
-
-    export default {
-        mounted() {
-            console.log('Component mounted.')
+export default {
+    data() {
+        return {
+            input_message_agent: "",
+            messages: [
+                {
+                    sender: "client",
+                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
+                },
+                {
+                    sender: "agent",
+                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
+                },
+                {
+                    sender: "agent",
+                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
+                },
+                {
+                    sender: "agent",
+                    text: "Lorem, ip"
+                }
+            ]
+        };
+    },
+    methods: {
+        agent_envoyer_message() {
+            if (this.input_message_agent.trim() !== "") {
+                this.messages.push({
+                    sender: "agent",
+                    text: this.input_message_agent
+                });
+                this.input_message_agent = "";
+            }
         }
     }
+};
 </script>
-
