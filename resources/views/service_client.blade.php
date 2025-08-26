@@ -38,7 +38,7 @@
             <!-- zone de saisie -->
 
             <section class="espace_discussion">
-                <espace_discussion></espace_discussion>
+                <espace_discussion_client></espace_discussion_client>
             </section>
 
         </section>

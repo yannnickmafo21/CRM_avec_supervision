@@ -17,12 +17,14 @@ const app = createApp({});
 
 import entete from './components/entete.vue';
 import liste_discussion from './components/liste_discussion.vue';
-import espace_discussion from './components/espace_discussion.vue';
+import espace_discussion_client from './components/espace_discussion_client.vue';
+import interface_maintenace from './components/interface_maintenace.vue';
 import profil from './components/profil.vue';
 
 app.component('entete', entete);
 app.component('liste_discussion', liste_discussion);
-app.component('espace_discussion', espace_discussion);
+app.component('espace_discussion_client', espace_discussion_client);
+app.component('interface_maintenace',interface_maintenace);
 app.component('profil', profil);
 
 /**

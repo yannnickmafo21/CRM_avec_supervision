@@ -48,7 +48,7 @@
     </section>
 </template>
 
-<style>
+<style scoped>
 .espace_discussion{
     display: flex;
     flex-direction: column;
@@ -75,7 +75,7 @@
             }
         }
         ._black{
-            background-color: black;
+            background-color: #000000;
             color:#fff;
         }
         ._green{
@@ -119,14 +119,14 @@
             align-self: flex-end;
             flex-direction: row-reverse;
             .message_agent{
-                background-color: rgb(31, 131, 102);
+                background-color: rgb(1, 84, 61);
                 color: rgb(255, 255, 255);
             }
         }
 
     ._espace_saisie{
         align-self: flex-end;
-        margin-bottom: 0.5em;
+        margin-bottom: 1em;
         width: 100%;
         height: 3em;
         display: flex;
@@ -146,6 +146,7 @@
             padding-left: 1em;
             border-radius: 2em 0em 0em 2em;
             border: none;
+            outline: none;
         }
         ._ajout{
             height: 1em;
@@ -164,15 +165,11 @@
 </style>
 
 <script>
-import { ScrollSpy } from 'bootstrap';
 
     export default {
         mounted() {
             console.log('Component mounted.')
         }
     }
-</script>
-
-<script setup>
 </script>
 

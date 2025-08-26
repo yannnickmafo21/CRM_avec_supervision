@@ -48,7 +48,7 @@
         padding-top: 2%;
         padding-bottom: 2%;
         width: 100%;
-        background-color: #f9f9f9;
+        background-color: #ffffff;
 
         display: flex;
         flex-direction: column;

@@ -28,8 +28,9 @@
         cursor: pointer;
         background-color: #fff;
         &:hover{
-            background-color: rgb(0, 204, 51);
-            transition-duration: 0.5s;
+            background-color: rgb(1, 117, 30);
+            transition-duration: 0.3s;
+            color: white;
         }
     }
 
