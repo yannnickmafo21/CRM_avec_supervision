@@ -14,8 +14,8 @@
                     :key="index"
                     :class="msg.sender === 'agent' ? 'div_message _div_message_envoyer' : 'div_message _div_message_recu'"
                 >
-                    <img src="/public/images/circle-user-round.svg" alt="">
-                    <div :class="msg.sender === 'agent' ? 'message_envoyer' : 'message_recu'">
+                    <img src="/images/circle-user-round.svg" alt="">
+                    <div :class="msg.sender === 'agent' ? 'message_envoyer message' : 'message_recu message'">
                         {{ msg.text }}
                     </div>
                 </div>
@@ -23,55 +23,15 @@
 
             <div class="_espace_saisie">
                 <div>
-                    <form class="formulaire" @submit.prevent="agent_envoyer_message">
+                    <form class="formulaire" @submit.prevent="sendMessage">
                         <input
                             type="text"
                             placeholder="Aa"
                             class="_input"
-                            v-model="input_message_agent"
+                            v-model="input_message_agent" id="input_message_agent"
                         >
-                        <img src="/public/images/paperclip.svg" alt="" class="_ajout">
-                        <img src="/public/images/smile.svg" alt="" class="_ajout">
-                        <button type="submit">
-                            Envoyer
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!--bloc client-->
-        <section class="espace_discussion">
-            <div class="_espace_bouton">
-                <button class="_green">
-                    Terminer
-                </button>
-            </div>
-
-            <div class="_espace_message">
-                <div
-                    v-for="(msg, index) in messages"
-                    :key="index"
-                    :class="msg.sender === 'client' ? 'div_message _div_message_envoyer ' : 'div_message _div_message_recu'"
-                >
-                    <img src="/public/images/circle-user-round.svg" alt="">
-                    <div :class="msg.sender === 'client' ? 'message_envoyer' : 'message_recu'">
-                        {{ msg.text }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="_espace_saisie">
-                <div>
-                    <form class="formulaire" @submit.prevent="client_envoyer_message">
-                        <input
-                            type="text"
-                            placeholder="Aa"
-                            class="_input"
-                            v-model="input_message_client"
-                        >
-                        <img src="/public/images/paperclip.svg" alt="" class="_ajout">
-                        <img src="/public/images/smile.svg" alt="" class="_ajout">
+                        <img src="/images/paperclip.svg" alt="" class="_ajout">
+                        <img src="/images/smile.svg" alt="" class="_ajout">
                         <button type="submit">
                             Envoyer
                         </button>
@@ -83,6 +43,8 @@
 </template>
 
 <style scoped>
+
+*{font-family: sans-serif;}
 
 .conteneur{
     display: flex;
@@ -134,7 +96,6 @@
             gap: 0.5em;
             max-width: 85%;
             clear: both;
-            margin: 0.5em;
             flex-direction: row-reverse;
             img{
                 border: none;
@@ -143,13 +104,17 @@
                 border-radius: 2em;
             }
 
-            /** style pour les messages envoyés */
-            .message_envoyer{
-                padding: 2%;
+            .message{
+                overflow: visible;
+                padding: 4%;
                 width: fit-content;
                 height: 100%;
                 border-radius: 0.5em;
-                background-color: rgb(0, 161, 94);
+            }
+            /** style pour les messages envoyés */
+            .message_envoyer{
+                background-color: rgb(1, 84, 61);
+                color:white;
             }
 
             /** style pour les messages reçus */
@@ -235,57 +200,33 @@
 
 </style>
 
-<script>
-export default {
-    data() {
-        return {
-            input_message_agent: "",
-            input_message_client: "",
-            messages: [
-                {
-                    sender: "agent",
-                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-                },
-                {
-                    sender: "agent",
-                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-                },
-                {
-                    sender: "agent",
-                    text: "Lorem, ip"
-                },
-                {
-                    sender: "client",
-                    text: "adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et apeiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-                },
-                {
-                    sender: "client",
-                    text: "adipisicing elit. Dolorum, "
-                },
-            ],
-        };
-    },
-    methods: {
-        agent_envoyer_message() {
-            if (this.input_message_agent.trim() !== "") {
-                this.messages.push({
-                    sender: "agent",
-                    text: this.input_message_agent,
-                });
-                this.input_message_agent = "";
-            }
-        },
+<script setup>
+import { ref, onMounted } from 'vue'
+import { io } from 'socket.io-client'
 
-        client_envoyer_message() {
-            if (this.input_message_client.trim() !== "") {
-                this.messages.push({
-                    sender: "client",
-                    text: this.input_message_client,
-                });
-                this.input_message_client = "";
-            }
-        }
+const socket = io('http://localhost:2020');
+
+const input_message_agent = ref("");
+const messages = ref([]);
+
+function sendMessage() {
+    if(input_message_agent.value.trim() !== "") {
+        socket.emit('message_d_agent-technique', input_message_agent.value);
+        messages.value.push({
+            sender: "agent",
+            text: input_message_agent.value
+        });
+        input_message_agent.value = "";
     }
-};
+}
+
+// Réception des messages du serveur
+socket.on('message_client', function(msg){
+    console.log("Message du client:", msg);
+    messages.value.push({
+        sender: "client",
+        text: msg,
+    });
+});
 </script>
 

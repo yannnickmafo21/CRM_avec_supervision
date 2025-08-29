@@ -1,6 +1,6 @@
 <template>
     <div class="bulle" ref="bulle" @click="ouvrir_tchat">
-        <img src="/public/images/chat.svg" alt="" >
+        <img src="/images/chat.svg" alt="" >
     </div>
 
     <section class="espace_discussion" ref="espace_discussion">
@@ -13,24 +13,24 @@
                 :key="index"
                 :class="msg.sender === 'client' ? 'div_message _div_message_envoyer ' : 'div_message _div_message_recu'"
             >
-                <img src="/public/images/circle-user-round.svg" alt="">
-                <div :class="msg.sender === 'client' ? 'message_envoyer' : 'message_recu'">
+                <img src="/images/circle-user-round.svg" alt="">
+                <div :class="msg.sender === 'client' ? 'message_envoyer message' : 'message_recu message'">
                     {{ msg.text }}
                 </div>
             </div>
         </div>
         <div class="_espace_saisie">
             <div>
-                <form class="formulaire" @submit.prevent="client_envoyer_message">
+                <form class="formulaire" @submit.prevent="sendMessage">
                     <input
                         type="text"
                         placeholder="Aa"
                         class="_input"
-                        v-model="input_message_client"
+                        v-model="input_message_client" id="input_message_client"
                     >
-                    <img src="/public/images/paperclip.svg" alt="" class="_ajout">
-                    <img src="/public/images/smile.svg" alt="" class="_ajout">
-                    <button type="submit">
+                    <img src="/images/paperclip.svg" alt="" class="_ajout">
+                    <img src="/images/smile.svg" alt="" class="_ajout">
+                    <button type="submit" @click="sendMessage">
                         Envoyer
                     </button>
                 </form>
@@ -40,6 +40,10 @@
 </template>
 
 <style scoped>
+*{
+    font-family: sans-serif;
+}
+
 .bulle{
     background-color: #2a0e0e;
     height: 3em;
@@ -106,21 +110,22 @@
                 border-radius: 2em;
             }
 
-            /** style pour les messages envoyés */
-            .message_envoyer{
-                padding: 2%;
+            .message{
+                overflow: visible;
+                padding: 4%;
                 width: fit-content;
                 height: 100%;
                 border-radius: 0.5em;
-                background-color: rgb(0, 161, 94);
+            }
+
+            /** style pour les messages envoyés */
+            .message_envoyer{
+                background-color: rgb(1, 84, 61);
+                color: white;
             }
 
             /** style pour les messages reçus */
             .message_recu{
-                padding: 2%;
-                width: fit-content;
-                height: 100%;
-                border-radius: 0.5em;
                 background-color: rgb(255, 255, 255);
                 color: black;
             }
@@ -198,56 +203,49 @@
 </style>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue'
+// Importe le client Socket.io (assure-toi d’avoir installé socket.io-client)
+import { io } from 'socket.io-client'
 
 const bulle = ref(null);
 const espace_discussion = ref(null);
 
+const socket = io('http://localhost:2020');
+
 const input_message_client = ref("");
-const messages = ref([
-    {
-        sender: "agent",
-        text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-    },
-    {
-        sender: "agent",
-        text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-    },
-    {
-        sender: "agent",
-        text: "Lorem, ip"
-    },
-    {
-        sender: "client",
-        text: "adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et apeiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-    },
-    {
-        sender: "client",
-        text: "adipisicing elit. Dolorum, "
-    },
-]);
+const messages = ref([]);
 
-function ouvrir_tchat() {
-    if (bulle.value && espace_discussion.value) {
-        bulle.value.style.display = 'none';
-        espace_discussion.value.style.display = 'flex';
-    }
-}
+// Réception des messages du serveur
+socket.on('message_d_agent-technique', function(msg){
+    messages.value.push({
+        sender: "agent",
+        text: msg
+    });
+});
 
-function fermer_tchat() {
-    if (bulle.value && espace_discussion.value) {
-        bulle.value.style.display = 'flex';
-        espace_discussion.value.style.display = 'none';
-    }
-}
+socket.on('message_d_agent-client', function(msg){
+    messages.value.push({
+        sender: "agent",
+        text: msg
+    });
+});
 
-function client_envoyer_message() {
-    if (input_message_client.value.trim() !== "") {
+
+// Envoi du message au serveur
+function sendMessage() {
+    if(input_message_client.value.trim() !== "") {
+        socket.emit('message_client', input_message_client.value);
         messages.value.push({
             sender: "client",
             text: input_message_client.value
         });
-        input_message_client.value = "";
+        input_message_client.value = '';
+    }
+}
+function ouvrir_tchat() {
+    if (bulle.value && espace_discussion.value) {
+        bulle.value.style.display = 'none';
+        espace_discussion.value.style.display = 'flex';
     }
 }
 

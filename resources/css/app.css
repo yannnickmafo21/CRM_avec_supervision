@@ -5,6 +5,7 @@
 }
 
 body{
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
 }
@@ -15,7 +16,7 @@ main{
         width: 100vw;
 
         display: grid;
-        grid-template-columns: 0.5fr 1fr 1fr 1fr;
+        grid-template-columns: 0.7fr 1fr 1fr 1fr;
         grid-template-rows: 0.5fr 1fr 1fr 1fr;
 
         .entete{
@@ -33,10 +34,11 @@ main{
         .liste_discussion{
             grid-row: 2/5;
             grid-column: 2/2;
+            background: #00ff2a;
         }
 
         .espace_discussion{
-            background-color: rgb(207, 207, 208);
+            background-color: rgb(196, 196, 196);
             grid-row: 2/5;
             grid-column: 3/5;
         }

@@ -26,7 +26,7 @@
         </div>
 </template>
 
-<style>
+<style scoped>
 *{
     overflow: hidden;
     margin: 0px;
@@ -58,7 +58,7 @@
         height: 6em;
         width: 6em;
     }
-} 
+}
 
 .autres_services{
     button{

@@ -18,7 +18,7 @@
                 :key="index"
                 :class="msg.sender === 'client' ? '_div_message_client div_message' : '_div_message_agent div_message'"
             >
-                <img src="/public/images/circle-user-round.svg" alt="">
+                <img src="/images/circle-user-round.svg" alt="">
                 <div :class="msg.sender === 'client' ? 'message_client message' : 'message_agent message'">
                     {{ msg.text }}
                 </div>
@@ -28,13 +28,13 @@
         <div class="_espace_saisie">
             <div>
                 <input
-                    v-model="input_message_agent"
+                    v-model="input_message_agent" id="input_message_agent"
                     @keyup.enter="agent_envoyer_message"
                     type="text"
                     class="_input"
                     placeholder="Ecrire un message..."
                 >
-                <img src="/public/images/plus.svg" alt="" class="_ajout">
+                <img src="/images/paperclip.png" alt="" class="_ajout">
             </div>
         </div>
     </section>
@@ -92,6 +92,7 @@
                     border-radius: 2em;
                 }
                 .message{
+                    overflow: visible;
                     padding: 2%;
                     width: fit-content;
                     height: 100%;
@@ -159,41 +160,44 @@
 
 </style>
 
-<script>
-export default {
-    data() {
-        return {
-            input_message_agent: "",
-            messages: [
-                {
-                    sender: "client",
-                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-                },
-                {
-                    sender: "agent",
-                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-                },
-                {
-                    sender: "agent",
-                    text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, veniam excepturi veritatis sint nemo deleniti consectetur repellat expedita nisi aliquam similique sed et aperiam reiciendis accusantium? Ab, ipsum? Quaerat, vitae."
-                },
-                {
-                    sender: "agent",
-                    text: "Lorem, ip"
-                }
-            ]
-        };
-    },
-    methods: {
-        agent_envoyer_message() {
-            if (this.input_message_agent.trim() !== "") {
-                this.messages.push({
-                    sender: "agent",
-                    text: this.input_message_agent
-                });
-                this.input_message_agent = "";
-            }
-        }
+<script setup>
+import { ref, onMounted } from 'vue';
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:2020');
+
+const input_message_agent = ref("");
+const messages = ref([
+    {
+        sender: "agent",
+        text: "Bienvenue dans le chat technique."
     }
-};
+]);
+
+// Réception des messages du client
+socket.on('message_client', function(msg){
+    messages.value.push({
+        sender: "client",
+        text: msg
+    });
+});
+
+socket.on('message_d_agent-technique', function(msg){
+    messages.value.push({
+        sender: "agent",
+        text: msg
+    });
+});
+
+// Envoi du message agent au serveur
+function agent_envoyer_message() {
+    if (input_message_agent.value.trim() !== "") {
+        socket.emit('message_d_agent-client', input_message_agent.value);
+        messages.value.push({
+            sender: "agent",
+            text: input_message_agent.value
+        });
+        input_message_agent.value = "";
+    }
+}
 </script>
