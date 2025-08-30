@@ -4,11 +4,11 @@
         <div class="_div_recherche">
             <div class="zone_recherche">
                 <img src="/images/search.svg" alt="">
-                <input type="text" class="input_recherche" placeholder="Rechercher">
+                <input type="text" class="input_recherche" placeholder="Rechercher" id="input_recherche" @input="search"/>
             </div>
             <div class="div_boutons">
-                <button class="_boutons" @click="tier_non_lu" >Non lue</button>
-                <button class="_boutons">En attente</button>
+                <button class="_boutons" @click="trier_non_lu" >Non lue</button>
+                <button class="_boutons" @click="trier_en_attente">En attente</button>
             </div>
         </div>
         <!-- liste des discussions en cours -->
@@ -30,7 +30,7 @@
 
                     <div class="div_heure">
                         <span class="heure">2h</span>
-                        <div :class="lu ? non_lu : lu ">
+                        <div :class="element.status ? 'lu' : 'non_lu' ">
                         </div>
                     </div>
 
@@ -44,93 +44,126 @@
 <script setup>
 import { ref } from 'vue';
 
-const tableau = [
+const tableau = ref([
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Leo Mignon",
         "message": "vous êtes désormais ami aveheizghie",
-        "lu": true
+        "status": true
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Veron Kouam",
         "message": "vous êtes désormais ami avec",
-        "lu": true
+        "status": true
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Stevia Nguemene Manfo",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": false
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Lëö Türâx Lëö Türâx",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": false
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Blonde Brenda",
         "message": "vous êtes désormais ami avec",
-        "lu": true
+        "status": "waiting"
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Neyou Francisca",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": false
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Duvan Tiakam",
         "message": "vous êtes désormais ami avec",
-        "lu": true
+        "status": true
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Francisca Neyou",
         "message": "vous êtes désormais ami avec",
-        "lu": true
+        "status": "waiting"
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Romaric Yelem",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": false
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Zack Leo Nzogang",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": false
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Jordan Donfack",
         "message": "vous êtes désormais ami avec",
-        "lu": true
+        "status": "waiting"
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Alexia Investissement",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": true
     },
     {
         "profil": "/images/circle-user-round.svg",
         "profil_name": "Mmerveille Tem",
         "message": "vous êtes désormais ami avec",
-        "lu": false
+        "status": false
     }
-];
+]);
 
-const tableau_filtrer = ref([...tableau]);
+const tableau_filtrer = ref([...tableau.value]);
+const filtre_non_lu = ref(false);
+const filtre_en_attente = ref(false);
+const searchText = ref("");
 
-function tier_non_lu(){
-    tableau_filtrer.value = tableau.filter(element => element.lu === false);
+function trier_non_lu(){
+    filtre_non_lu.value = !filtre_non_lu.value;
+    filtre_en_attente.value = false;
+    applyFilters();
+}
+
+function trier_en_attente(){
+    filtre_en_attente.value = !filtre_en_attente.value;
+    filtre_non_lu.value = false;
+    applyFilters();
+}
+
+function search(event){
+    searchText.value = event.target.value;
+    applyFilters();
+}
+
+function applyFilters() {
+    let result = [...tableau.value];
+    if (filtre_non_lu.value) {
+        result = result.filter(element => element.status === false);
+    }
+    if (filtre_en_attente.value) {
+        result = result.filter(element => element.status === "waiting");
+    }
+    if (searchText.value.trim() !== "") {
+        result = result.filter(element =>
+            element.profil_name.toLowerCase().includes(searchText.value.trim().toLowerCase())
+        );
+    }
+    tableau_filtrer.value = result;
 }
 </script>
+
 
 <style scoped>
 .container{
@@ -138,7 +171,6 @@ function tier_non_lu(){
     flex-direction: column;
     height: 100%;
     width: 100%;
-
 
     ._div_recherche{
         height: fit-content;
@@ -208,6 +240,7 @@ function tier_non_lu(){
         overflow-y: auto;
         gap: 0.5em;
         padding-top: 1%;
+        padding-bottom: 3%;
 
         .requetes{
             display: grid;
@@ -260,7 +293,7 @@ function tier_non_lu(){
                     border-radius: 50%;
                 }
                 .lu{
-                    background-color: rgb(0, 255, 47);
+                    background-color: rgb(6, 137, 30);
                     height: 0.5em;
                     width: 0.5em;
                     border-radius: 50%;

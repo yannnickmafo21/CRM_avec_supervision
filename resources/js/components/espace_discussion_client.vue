@@ -35,6 +35,7 @@
                     placeholder="Ecrire un message..."
                 >
                 <img src="/images/paperclip.png" alt="" class="_ajout">
+                <img src="/images/smile.svg" alt="" class="_ajout">
             </div>
         </div>
     </section>
@@ -126,12 +127,13 @@
         align-items: center;
         justify-content: center;
         div{
+            background-color: #ffffff;
             display: flex;
             border-radius: 2em;
             justify-content: center;
             align-items: center;
             padding-right: 1em;
-            width: 90%;
+            width: 80%;
         }
         ._input{
             height: 2.5em;
@@ -142,8 +144,14 @@
             outline: none;
         }
         ._ajout{
-            height: 1em;
-            width: 1em;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0.5em;
+            background-color: #fff;
+            &:hover{
+                border-radius: 50%;
+                background-color: rgb(225, 225, 225);
+            }
         }
     }
 }

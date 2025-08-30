@@ -170,6 +170,9 @@
                     background-color: green;
                     border : none;
                     color: white;
+                    &:hover{
+                        background-color: rgb(0, 94, 0);
+                    }
                 }
             }
         }
@@ -184,6 +187,12 @@
         ._ajout{
             height: 1em;
             width: 1em;
+            margin: 0.2em;
+            background-color: #fff;
+            &:hover{
+                border-radius: 50%;
+                background-color: rgb(225, 225, 225);
+            }
         }
     }
 }
