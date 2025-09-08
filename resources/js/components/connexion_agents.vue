@@ -5,12 +5,11 @@
     </div>
     <div class="mes_div formulaire">
         <h1>Connexion</h1>
-        <form action="/auth_employer" method="GET">
+        <form @submit.prevent="login">
             <p>Veiller saisir vos informations pour vous connecter à votre espace de travail</p>
             <div>
-                <input type="text" name="nom_agent" id="nom_agent" placeholder="Nom d'utilisateur" maxlength="25" required>
-                <input type="password" name="mot_de_passe" id="password" placeholder="Mot de passe" maxlength="8" required>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="text" v-model="nom"  id="nom" placeholder="Nom d'utilisateur" maxlength="25" required>
+                <input type="password" v-model="mot_de_passe" id="mot_de_passe" placeholder="Mot de passe" maxlength="8" required>
             </div>
             <a href="." class="lien_oubliés">Identifiants oubliés ?</a>
             <div>
@@ -109,4 +108,43 @@
 </style>
 
 <script setup>
+import { ref } from 'vue'
+
+const nom = ref('')
+const mot_de_passe = ref('')
+
+async function login() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  try {
+    const response = await fetch('http://127.0.0.1:8000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify({
+        nom: nom.value,
+        mot_de_passe: mot_de_passe.value
+      })
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Erreur de connexion:', errorText)
+      return
+    }
+
+    const data = await response.json()
+    console.log('Connexion réussie ', data)
+
+    // Sauvegarde du token JWT
+    localStorage.setItem('token', data.access_token)
+
+    window.location.href = '/service_client'
+
+  } catch (error) {
+    console.error('Erreur lors de la connexion:', error)
+  }
+}
 </script>
+

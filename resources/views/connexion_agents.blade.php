@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/resources/css/app.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>service client connexion</title>
     @vite(['resources/css/connexion_agent.css','resources/js/app'])
 </head>
 <body>
     <div id="app">
-        <interface_connexion></interface_connexion>
+        <connexion_agents></connexion_agents>
     </div>
 </body>
 </html>

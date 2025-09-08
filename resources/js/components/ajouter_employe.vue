@@ -2,18 +2,18 @@
 <section class="container">
     <div class="form-container">
         <h1>Ajouter un employé</h1>
-        <form enctype="multipart/form-data" action="/ajout_employer" method="GET">
+        <form enctype="multipart/form-data" @submit.prevent="login">
             <div class="profil_choix">
-                <img :src="image" alt="">
+                <img src="/images/circle-user-round.svg" alt="">
                 <input type="file" name="photo" accept="image/*">
             </div>
             <div class="info_employe">
-                <input type="text" name="nom"  placeholder="nom" required>
-                <input type="email" name="email" placeholder="email" required>
-                <input type="text" name="prenom" placeholder="prenom" required>
-                <input type="tel" name="phone" placeholder="téléphone" required>
-                <input type="text" name="domicile" placeholder="domicile" required>
-                <select name="sexe" id="">
+                <input type="text" name="nom"  placeholder="nom" v-model="nom" required>
+                <input type="text" name="prenom" placeholder="prenom" v-model="prenom" required>
+                <input type="email" name="email" placeholder="email" v-model="email" required>
+                <input type="tel" name="phone" placeholder="téléphone" v-model="phone" required>
+                <input type="text" name="domicile" placeholder="domicile" v-model="domicile" required>
+                <select name="sexe" id="" v-model="sexe">
                     <option value="masculin">Masculin</option>
                     <option value="feminin">Feminin</option>
                 </select>
@@ -113,11 +113,54 @@
 </style>
 
 <script setup>
-    import { ref } from 'vue';
+import { ref } from 'vue'
 
-    const image = ref('images/user-round-plus.svg');
+function annuler(){
+    window.location.href = '/superviseur';
+}
 
-    function annuler(){
-        window.location.href = '/interface_supervision';
+const nom = ref('')
+const prenom = ref('')
+const email = ref('')
+const phone = ref('')
+const domicile = ref('')
+const sexe = ref('')
+
+async function login() {
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  try {
+    const response = await fetch('http://127.0.0.1:8000/ajout_employer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify({
+        nom: nom.value,
+        prenom: prenom.value,
+        email: email.value,
+        phone: phone.value,
+        domicile: domicile.value,
+        sexe: sexe.value,
+      })
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Erreur de connexion:', errorText)
     }
+
+    const data = await response.json()
+    console.log('Connexion réussie ', data)
+    console.log( data.mot_de_passe);
+
+    window.location.href = '/superviseur';
+
+} catch (error) {
+    console.error('Erreur lors de la connexion:', error)
+  }
+}
+
+
 </script>

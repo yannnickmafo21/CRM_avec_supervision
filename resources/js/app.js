@@ -28,7 +28,7 @@ app.component('entete', entete);
 app.component('liste_discussion', liste_discussion);
 app.component('espace_discussion_client', espace_discussion_client);
 app.component('interface_maintenace',interface_maintenace);
-app.component('interface_connexion' ,connexion_agents);
+app.component('connexion_agents' ,connexion_agents);
 app.component('bulle_discussion', bulle_discussion);
 app.component('ajouter_employe',ajouter_employe);
 app.component('profil', profil);
