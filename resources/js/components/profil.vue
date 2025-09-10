@@ -2,9 +2,8 @@
         <div class="espace_profil">
             <div class="autres_services div">
                 <div class="photo_profil div">
-                <img src="/public/images/user-round-x.svg" alt="">
+                <img src="" alt="">
                 <p>
-                    azertyui
                 </p>
             </div>
                 <button>Notification</button>
@@ -103,10 +102,31 @@
 }
 </style>
 
-<script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
+<script setup>
+
+import { ref, onMounted } from 'vue';
+
+const employe = ref(null);
+const token = localStorage.getItem('token');
+
+onMounted(async () =>{
+    try{
+        const response = await fetch("http://127.0.0.1:8000/api/prendre_employe", {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            "Accept": "application/json",
         }
+    });
+
+    if (!response.ok) throw new Error("Non autorisé");
+
+    employe.value = await response.json();
+    console.log(employe.value);
+    }   catch (e) {
+        console.error(e);
+        alert("Session expirée, reconnectez-vous !");
+        window.location.href = "/connexion_agents";
     }
+});
 </script>

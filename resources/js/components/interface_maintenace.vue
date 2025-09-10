@@ -213,7 +213,7 @@
 import { ref, onMounted } from 'vue'
 import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:2020');
+const socket = io("http://localhost:2020")
 
 const input_message_agent = ref("");
 const messages = ref([]);

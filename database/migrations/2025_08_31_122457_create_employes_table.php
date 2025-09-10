@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('fonction')->default('service_client')->isNotEmpty();
             $table->string('domicile');
             $table->string('sexe')->default('Masculin')->enum('Masculin', 'Feminin');
+            $table->string('token')->unique();
+            $table->string('photo');
             $table->timestamps();
         });
     }

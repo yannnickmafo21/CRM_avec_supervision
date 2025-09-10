@@ -34,6 +34,7 @@ class controleur_acces extends Controller
             'fonction'=>'service_client',
             'domicile'=>$request->domicile,
             'sexe'=>$request->sexe,
+            'photo'=>$request->photo,
         ]);
         return response()->json([
             'message' => 'Inscription réussie',
@@ -65,9 +66,16 @@ class controleur_acces extends Controller
         $employe->token = $token;
         $employe->save();
 
+        setcookie('token', $token, time() + (60 * 60 * 24 * 30), "/","",true,false);  // 30 jours
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer'
         ], 201);
+    }
+
+    public function getEmploye(Request $request)
+    {
+        return response()->json(['employe' => auth()->user()]);
     }
 }

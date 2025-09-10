@@ -4,8 +4,9 @@
         <h1>Ajouter un employé</h1>
         <form enctype="multipart/form-data" @submit.prevent="login">
             <div class="profil_choix">
-                <img src="/images/circle-user-round.svg" alt="">
-                <input type="file" name="photo" accept="image/*">
+                <img v-if="photo" :src="photo" alt="">
+                <img v-else src="/images/circle-user-round.svg" alt="">
+                <input type="file" name="photo" accept="image/*" @change="choix" required>
             </div>
             <div class="info_employe">
                 <input type="text" name="nom"  placeholder="nom" v-model="nom" required>
@@ -115,6 +116,16 @@
 <script setup>
 import { ref } from 'vue'
 
+const photo = ref(null)
+
+function choix(event){
+      const file = event.target.files[0];
+
+      if (file) {
+        photo.value = URL.createObjectURL(file);
+      }
+    };
+
 function annuler(){
     window.location.href = '/superviseur';
 }
@@ -127,7 +138,7 @@ const domicile = ref('')
 const sexe = ref('')
 
 async function login() {
-    
+    console.log(photo.value);
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   try {
     const response = await fetch('http://127.0.0.1:8000/ajout_employer', {
@@ -143,6 +154,8 @@ async function login() {
         phone: phone.value,
         domicile: domicile.value,
         sexe: sexe.value,
+        photo: photo.value,
+
       })
     })
 
@@ -155,7 +168,7 @@ async function login() {
     console.log('Connexion réussie ', data)
     console.log( data.mot_de_passe);
 
-    window.location.href = '/superviseur';
+    //window.location.href = '/superviseur';
 
 } catch (error) {
     console.error('Erreur lors de la connexion:', error)

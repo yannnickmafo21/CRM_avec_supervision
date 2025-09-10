@@ -140,7 +140,7 @@ async function login() {
     // Sauvegarde du token JWT
     localStorage.setItem('token', data.access_token)
 
-    window.location.href = '/service_client'
+    window.location.href = 'api/service_client'
 
   } catch (error) {
     console.error('Erreur lors de la connexion:', error)

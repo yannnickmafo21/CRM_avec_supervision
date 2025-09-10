@@ -34,7 +34,7 @@
                     class="_input"
                     placeholder="Ecrire un message..."
                 >
-                <img src="/images/paperclip.png" alt="" class="_ajout">
+                <img src="/images/paperclip.svg" alt="" class="_ajout">
                 <img src="/images/smile.svg" alt="" class="_ajout">
             </div>
         </div>

@@ -43,16 +43,6 @@ return [
 
         'api' => [
             'driver' => 'jwt',
-            'provider' => 'users',
-        ],
-
-        'web_employe' => [
-            'driver' => 'session',
-            'provider' => 'employes',
-        ],
-
-        'employe' => [
-            'driver' => 'jwt',
             'provider' => 'employes',
         ],
     ],
@@ -82,7 +72,7 @@ return [
 
         'employes' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL',App\Models\Employe::class),
+            'model' => App\Models\Employe::class,
         ],
 
         // 'users' => [

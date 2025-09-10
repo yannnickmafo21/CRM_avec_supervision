@@ -23,12 +23,13 @@ class Employe extends Authenticatable implements JWTSubject
         'domicile',
         'sexe',
         'token',
+        'photo',
     ];
 
     //récupération des employés du service client
     public static function getEmployesClient()
     {
-        return self::where('fonction', 'service client')->get();
+        return self::where('fonction', 'service_client')->get();
     }
 
     public function getJWTIdentifier()
