@@ -1,7 +1,7 @@
 <template>
         <div class="entete">
             <div class="logo">
-                <img src="/images/search.svg" alt="">
+                <img src="/images/logo_notchpay.png" alt="">
             </div>
             <button>
                 Transférer la discussion

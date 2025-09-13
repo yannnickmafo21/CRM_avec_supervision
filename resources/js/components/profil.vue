@@ -2,8 +2,9 @@
         <div class="espace_profil">
             <div class="autres_services div">
                 <div class="photo_profil div">
-                <img src="" alt="">
+                <img :src="image" alt="">
                 <p>
+                    {{ nom }}
                 </p>
             </div>
                 <button>Notification</button>
@@ -106,8 +107,10 @@
 
 import { ref, onMounted } from 'vue';
 
-const employe = ref(null);
-const token = localStorage.getItem('token');
+const nom = ref('Agent de service client')
+const image = ref(null)
+const data = ref(null);
+const token = localStorage.getItem('token'); 
 
 onMounted(async () =>{
     try{
@@ -120,13 +123,16 @@ onMounted(async () =>{
     });
 
     if (!response.ok) throw new Error("Non autorisé");
+    
+    data.value = await response.json();
+    
+    nom.value = data.value.employe.nom;
 
-    employe.value = await response.json();
-    console.log(employe.value);
+    image.value = data.value.employe.photo;
     }   catch (e) {
         console.error(e);
-        alert("Session expirée, reconnectez-vous !");
-        window.location.href = "/connexion_agents";
+        alert('Votre session a expirée');
+        //window.location.href = "/connexion_agents";
     }
 });
 </script>

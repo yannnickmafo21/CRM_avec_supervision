@@ -138,7 +138,7 @@ const domicile = ref('')
 const sexe = ref('')
 
 async function login() {
-    console.log(photo.value);
+    
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   try {
     const response = await fetch('http://127.0.0.1:8000/ajout_employer', {

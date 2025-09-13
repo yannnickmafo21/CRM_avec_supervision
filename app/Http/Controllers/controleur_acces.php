@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Employe;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -76,6 +75,6 @@ class controleur_acces extends Controller
 
     public function getEmploye(Request $request)
     {
-        return response()->json(['employe' => auth()->user()]);
+        return response()->json(['employe' => auth('employe')->user()]);
     }
 }

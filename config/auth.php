@@ -41,7 +41,12 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
+        'client' => [
+            'driver' => 'jwt',
+            'provider' => 'clients',
+        ],
+
+        'employe' => [
             'driver' => 'jwt',
             'provider' => 'employes',
         ],
@@ -74,11 +79,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Employe::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Client::class,
+        ],
     ],
 
     /*
@@ -109,6 +114,13 @@ return [
         ],
 
         'employes' => [
+            'provider' => 'employes',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        
+        'clients' => [
             'provider' => 'employes',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,

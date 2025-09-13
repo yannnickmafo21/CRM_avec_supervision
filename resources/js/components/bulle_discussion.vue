@@ -1,17 +1,15 @@
 <template>
     <div class="bulle" ref="bulle" @click="ouvrir_tchat">
-        <img src="/images/chat.svg" alt="" >
+        <img src="/images/assistant.png" alt="" title="besoin d'assistance ?" >
     </div>
 
-    <section class="espace_discussion" ref="espace_discussion">
-        <button class="fermer_live" @click="fermer_tchat">
-            X
-        </button>
+    <section class="espace_discussion" ref="espace_discussion" v-if="temoin">
+        <button class="fermer_live" @click="fermer_tchat">X</button>
         <div class="_espace_message">
             <div
                 v-for="(msg, index) in messages"
                 :key="index"
-                :class="msg.sender === 'client' ? 'div_message _div_message_envoyer ' : 'div_message _div_message_recu'"
+                :class="msg.sender === 'client' ? 'div_message _div_message_envoyer' : 'div_message _div_message_recu'"
             >
                 <img src="/images/circle-user-round.svg" alt="">
                 <div :class="msg.sender === 'client' ? 'message_envoyer message' : 'message_recu message'">
@@ -20,26 +18,90 @@
             </div>
         </div>
         <div class="_espace_saisie">
-            <div>
-                <form class="formulaire" @submit.prevent="sendMessage">
-                    <input
-                        type="text"
-                        placeholder="Aa"
-                        class="_input"
-                        v-model="input_message_client" id="input_message_client"
-                    >
-                    <img src="/images/paperclip.svg" alt="" class="_ajout">
-                    <img src="/images/smile.svg" alt="" class="_ajout">
-                    <button type="submit" @click="sendMessage">
-                        Envoyer
-                    </button>
-                </form>
-            </div>
+            <form class="formulaire" @submit.prevent="sendMessage">
+                <input
+                    type="text"
+                    placeholder="Aa"
+                    class="_input"
+                    v-model="input_message_client"
+                    id="input_message_client"
+                >
+                <img src="/images/paperclip.svg" alt="" class="_ajout">
+                <img src="/images/smile.svg" alt="" class="_ajout">
+                <button type="submit">
+                    Envoyer
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section class="espace_discussion" id="inscrip" ref="espace_discussion" v-else>
+        <button class="fermer_live" @click="fermer_tchat">X</button>
+        <div class="_espace_formulaire">
+            <form @submit.prevent="inscrire">
+                <p>
+                    Veuillez remplir les champs suivants afin de débuter le Chat.
+                </p>
+                <div>
+                    <input type='email' v-model="email" placeholder="adresse email" required>
+                    <input type="password" placeholder="mot de passe" v-model="mot_de_passe" required>
+                </div>
+                <button type="submit">Soumettre</button>
+            </form>
         </div>
     </section>
 </template>
 
 <style scoped>
+#inscrip{
+    height: 40vh;
+}
+._espace_formulaire{
+    overflow: hidden;
+    height: 60vh;
+    width: 30vw;
+    display: flex;
+    form{
+        text-align: justify;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5em;
+        padding: 4%;
+        div{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            input{
+                font-size: 1.2em;
+                height: 2em;
+                border: none;
+                border-radius: 2em;
+                padding-left: 0.5em;
+                &:focus{
+                    outline: none;
+                }
+
+            }
+
+        }
+        button{
+            height: 2em;
+            width: 8em;
+            font-size: 1.1em;
+            border-radius: 0.5em;
+            &:hover{
+                background-color: #e0e0e0;
+            }
+        }
+    }
+}
+
 *{
     font-family: sans-serif;
 }
@@ -152,33 +214,30 @@
         height: 3em;
         display: flex;
         align-items: center;
-        justify-content: center;
-        div{
-            border:none;
-            width: 90%;
-            background-color: white;
+        .formulaire{
+            background-color: #fff;
+            align-items: center;
+            display: flex;
+            height: 2em;
+            justify-content: space-between;
             border-radius: 2em;
-            .formulaire{
-                display: flex;
+            padding-right: 1em;
+            gap:0.2em;
+            width: 90%;
+            button{
+                padding: 0.5rem 1em;
                 border-radius: 2em;
-                justify-content: space-between;
-                align-items: center;
-                padding-right: 1em;
+                overflow: hidden;
                 width: 100%;
-                button{
-                    padding: 0.5rem 1em;
-                    border-radius: 2em;
-                    overflow: hidden;
-                    height: 100%;
-                    background-color: green;
-                    border : none;
-                    color: white;
-                }
-            }
+                height: 100%;
+                background-color: green;
+                border : none;
+                color: white;
+            }   
         }
         ._input{
             height: 2em;
-            width: 70%;
+            width: 100%;
             padding-left: 1em;
             border-radius: 2em 0em 0em 2em;
             border: none;
@@ -204,32 +263,26 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-// Importe le client Socket.io (assure-toi d’avoir installé socket.io-client)
 import { io } from 'socket.io-client'
 
 const bulle = ref(null);
 const espace_discussion = ref(null);
+const temoin = ref(false);
 
-const socket = io('http://localhost:2020');
-
+const email = ref("");
+const mot_de_passe = ref("");
 const input_message_client = ref("");
 const messages = ref([]);
 
+const socket = io('http://localhost:2020');
+
 // Réception des messages du serveur
-socket.on('message_d_agent-technique', function(msg){
-    messages.value.push({
-        sender: "agent",
-        text: msg
-    });
+socket.on('message_d_agent-technique', msg => {
+    messages.value.push({ sender: "agent", text: msg });
 });
-
-socket.on('message_d_agent-client', function(msg){
-    messages.value.push({
-        sender: "agent",
-        text: msg
-    });
+socket.on('message_d_agent-client', msg => {
+    messages.value.push({ sender: "agent", text: msg });
 });
-
 
 // Envoi du message au serveur
 function sendMessage() {
@@ -242,6 +295,35 @@ function sendMessage() {
         input_message_client.value = '';
     }
 }
+
+async function inscrire() {
+   try {
+        const response = await fetch('http://127.0.0.1:8000/inscrire', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email.value,
+                mot_de_passe: mot_de_passe.value,
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Erreur de connexion:', errorText);
+            return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.access_token);
+        temoin.value = true;
+    } catch (error) {
+        console.error('Erreur lors de la connexion:', error);
+    }
+}
+
 function ouvrir_tchat() {
     if (bulle.value && espace_discussion.value) {
         bulle.value.style.display = 'none';
@@ -249,10 +331,44 @@ function ouvrir_tchat() {
     }
 }
 
+function fermer_tchat() {
+    if (bulle.value && espace_discussion.value) {
+        bulle.value.style.display = 'flex';
+        espace_discussion.value.style.display = 'none';
+    }
+}
+
 onMounted(() => {
     if (bulle.value && espace_discussion.value) {
         bulle.value.style.display = 'flex';
         espace_discussion.value.style.display = 'none';
+    }
+});
+
+onMounted(async () =>{
+    const token = localStorage.getItem('token');
+    try{
+        const response = await fetch("http://127.0.0.1:8000/api/prendre_client", {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            "Accept": "application/json",
+        }
+    });
+
+    if (!response.ok) throw new Error("Non autorisé");
+
+    const data = await response.json();
+    temoin.value = true;
+    if(data.client == null) {
+        console.error("Aucune donnée trouvée");
+        temoin.value = false;
+
+        return;
+    }
+    }   catch (e) {
+        console.error(e);
+        alert('Votre session a expirée')
     }
 });
 </script>
